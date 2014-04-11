@@ -47,9 +47,9 @@ shared abstract class Promise<out Value>() satisfies Term<Value, [Value]> {
         object f satisfies Future<Value> {
             
             CountDownLatch latch = CountDownLatch(1);
-            AtomicReference<Value|Exception> ref = AtomicReference<Value|Exception>();
+            AtomicReference<Value|Throwable> ref = AtomicReference<Value|Throwable>();
             
-            void reportReason(Exception e) {
+            void reportReason(Throwable e) {
                 ref.set(e);
                 latch.countDown(); 
             }
@@ -61,9 +61,9 @@ shared abstract class Promise<out Value>() satisfies Term<Value, [Value]> {
             
             outer.then_(reportValue, reportReason);
             
-            shared actual <Value|Exception>? peek() => ref.get();
+            shared actual <Value|Throwable>? peek() => ref.get();
             
-            shared actual Value|Exception get(Integer timeOut) {
+            shared actual Value|Throwable get(Integer timeOut) {
                 if (timeOut < 0) {
                     latch.await();
                 } else {

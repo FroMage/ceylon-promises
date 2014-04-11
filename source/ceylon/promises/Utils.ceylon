@@ -17,10 +17,10 @@ Promise<T> adaptValue<T>(T|Promise<T> val) {
     object adapter extends Promise<T>() {
       shared actual Promise<Result> then__<Result>(
         <Promise<Result>(T)> onFulfilled,
-        <Promise<Result>(Exception)> onRejected) {
+        <Promise<Result>(Throwable)> onRejected) {
         try {
           return onFulfilled(val);
-        } catch(Exception e) {
+        } catch(Throwable e) {
           return adaptReason<Result>(e);
         }
       }
@@ -34,14 +34,14 @@ Promise<T> adaptValue<T>(T|Promise<T> val) {
 }
 
 by("Julien Viet")
-Promise<T> adaptReason<T>(Exception reason) {
+Promise<T> adaptReason<T>(Throwable reason) {
   object adapted extends Promise<T>() {
     shared actual Promise<Result> then__<Result>(
       <Promise<Result>(T)> onFulfilled,
-      <Promise<Result>(Exception)> onRejected) {
+      <Promise<Result>(Throwable)> onRejected) {
       try {
         return onRejected(reason);
-      } catch(Exception e) {
+      } catch(Throwable e) {
         return adaptReason<Result>(e);
       }
     }

@@ -6,6 +6,6 @@ shared interface Transitionnable<in Value> {
     shared formal void resolve(<Value|Promise<Value>> val);
     
     "Rejects the promise with a reason."
-    shared formal void reject(Exception reason);
+    shared formal void reject(Throwable reason);
 
 }

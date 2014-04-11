@@ -27,7 +27,7 @@
      Promise<String> promise = getPromise();
      promise.then_(
          (String s) => print(\"The promise is resolved with \" + s),
-         (Exception e) => print(\"The promise is rejected with \" + e.message));
+         (Throwable e) => print(\"The promise is rejected with \" + e.message));
  
  The first function is called the `onFulfilled` callback and the second function is called the `onRejected` callback. The 
  `onRejected` function is optional. 
@@ -45,7 +45,7 @@
  The [[Deferred]] object implements the [[Transitionnable]] interface which provides two methods for resolving the promise:
  
  - `resolve`: resolves the promise with a *value*
- - `reject`: rejects the promise with an *reason* of type `Exception`
+ - `reject`: rejects the promise with an *reason* of type `Throwable`
  
  For example:
  
@@ -55,7 +55,7 @@
          String val = getValue();
          deferred.resolve(val);
        }
-       catch(Exception e) {
+       catch(Throwable e) {
          deferred.reject(e);
        }
      }
@@ -83,7 +83,7 @@
      Promise<Integer> promiseOfString = getPromiseOfInteger();
      promiseOfInteger.and(promiseOfString).then_(
          (Integer i, String s) => print(\"All resolved\"),
-         (Exception e) => print(\"One failed\"));
+         (Throwable e) => print(\"One failed\"));
  
  There are two things to note here:
  - the order of the arguments in the callback is in reverse order of the chaining.
@@ -117,8 +117,8 @@
  into a [[Future]] via its future:
  
      Promise<String> promise = getPromise();
-     Future<String|Exception> future = promise.future();
-     String|Exception resolution = future.get(10000);
+     Future<String|Throwable> future = promise.future();
+     String|Throwable resolution = future.get(10000);
  
  Keep in mind that this is not the way you should use promises as this defeats the non blocking model. Nevertheless
  can be useful to block (for instance: unit testing purposes).

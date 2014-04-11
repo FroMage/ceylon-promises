@@ -24,7 +24,7 @@ class Conjunction<out Element, out First, Rest>(Promise<First> first, Promise<Re
         }
     }
     
-    void onReject(Exception e) {
+    void onReject(Throwable e) {
         deferred.reject(e);
     }
     
@@ -46,7 +46,7 @@ class Conjunction<out Element, out First, Rest>(Promise<First> first, Promise<Re
 
     shared actual Promise<Result> then__<Result>(
             <Callable<Promise<Result>, Tuple<First|Element, First, Rest>>> onFulfilled,
-            <Promise<Result>(Exception)> onRejected) {
+            <Promise<Result>(Throwable)> onRejected) {
         
         Promise<Result> adapter(Tuple<First|Element, First, Rest> args) {
             value unflattened = unflatten(onFulfilled);

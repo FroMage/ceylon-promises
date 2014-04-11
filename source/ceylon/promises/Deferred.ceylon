@@ -14,7 +14,7 @@ shared class Deferred<Value>() satisfies Transitionnable<Value> & Promised<Value
     }
     
     class ListenerState(Anything(Value) onFulfilled,
-            Anything(Exception) onRejected,
+            Anything(Throwable) onRejected,
             ListenerState? previous = null)
         extends State() {
 
@@ -37,14 +37,14 @@ shared class Deferred<Value>() satisfies Transitionnable<Value> & Promised<Value
         
         shared actual Promise<Result> then__<Result>(
                 <Promise<Result>(Value)> onFulfilled, 
-                <Promise<Result>(Exception)> onRejected) {
+                <Promise<Result>(Throwable)> onRejected) {
                 
             Deferred<Result> deferred = Deferred<Result>();
             void callback<T>(<Promise<Result>(T)> on, T val) {
                 try {
                     Promise<Result> result = on(val);
                     deferred.resolve(result);
-                } catch(Exception e) {
+                } catch(Throwable e) {
                     deferred.reject(e);
                 }
             }
@@ -52,7 +52,7 @@ shared class Deferred<Value>() satisfies Transitionnable<Value> & Promised<Value
             void onFulfilledCallback(Value val) {
                 callback(onFulfilled, val);
             }
-            void onRejectedCallback(Exception reason) {
+            void onRejectedCallback(Throwable reason) {
                 callback(onRejected, reason);
             }
             
@@ -110,7 +110,7 @@ shared class Deferred<Value>() satisfies Transitionnable<Value> & Promised<Value
         update(adapted);
     }
 
-    shared actual void reject(Exception reason) {
+    shared actual void reject(Throwable reason) {
         Promise<Value> adapted = adaptReason<Value>(reason);
         update(adapted);
     }
